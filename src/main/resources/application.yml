@@ -1,0 +1,76 @@
+debug: false
+application:
+  domain: hqn
+  name: o-zone
+  delayed-exchange: watcher-delayed-exchange
+  initialDelay: 10000
+  fixedDelay: 60000
+  backup-delay-seconds: 5
+  tj-no-cache: false
+  sensor-targets: 11
+  #sensor-targets=11,7
+  ignite:
+    # mandatory
+    instance_name: o-zone_ignite
+    persistence_file_path: /home/hkooper/tmp/${application.name}/data
+    connector_port: 11211
+    # there're with default values
+    enable_file_persistence: true
+    base_multiplexor: 1024
+    page_init_counter: 4
+    region_initial_size: 128
+    region_max_size: 4096
+    cluster_mode: false
+    server_address: 127.0.0.1
+    server_port_range: 47500..47509
+    network_ssl_required: false
+    optional:
+      metrics_log_freq: 0
+      qury_thread_pool_size: 2
+      data_streamer_thread_pool_size: 1
+      management_thread_pool_size: 2
+      public_thread_pool_size: 2
+      system_thread_pool_size: 2
+      rebalance_thread_pool_size: 1
+      async_callback_thread_pool_size: 2
+      peer_classloading_enable: false
+      storage_subpath: storage
+      wal_arch_subpath: walArchive
+      wal_subpath: walStore
+
+spring:
+  main:
+    # https://github.com/spring-projects/spring-boot/issues/4600#issuecomment-219687848
+    banner-mode: 'off'
+  application:
+    name: ${application.domain}.${application.name}
+  jackson:
+    default-property-inclusion: non_null
+
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc.lob.non_contextual_creation: true
+        dialect: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: hkooper
+    password: mo933rgl75
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-test-query: SELECT 1
+      pool-name: ${spring.application.name}
+      minimum-idle: 1
+      maximum-pool-size: 5
+      autocommit: true
+
+  groovy:
+    template.check-template-location: false
+
+server:
+  port: 38088
+  servlet.context-path: /${spring.application.name}
+
