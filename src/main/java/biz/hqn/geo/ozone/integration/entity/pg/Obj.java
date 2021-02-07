@@ -1,15 +1,14 @@
 package biz.hqn.geo.ozone.integration.entity.pg;
 
-import lombok.Getter;
-import lombok.ToString;
-import org.jetbrains.annotations.NotNull;
-import org.locationtech.jts.geom.Geometry;
-
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
+import com.vividsolutions.jts.geom.Geometry;
+import lombok.Getter;
+import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 
 @Entity
 @Table(schema = "mon", name = "obj")
@@ -20,7 +19,7 @@ public class Obj implements Serializable, Comparable<Obj> {
     @Id
     @Column(name = "id_obj")
     private long id_obj;
-    @Column
+    @Column(columnDefinition = "Geometry")
     private Geometry geom;
     @Column
     private String s_name;

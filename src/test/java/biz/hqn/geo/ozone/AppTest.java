@@ -1,9 +1,18 @@
 package biz.hqn.geo.ozone;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.locationtech.jts.geom.*;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.locationtech.spatial4j.context.SpatialContext;
 import org.locationtech.spatial4j.context.jts.JtsSpatialContext;
 import org.locationtech.spatial4j.context.jts.JtsSpatialContextFactory;
@@ -12,22 +21,34 @@ import org.locationtech.spatial4j.shape.Shape;
 import org.locationtech.spatial4j.shape.ShapeFactory;
 import org.locationtech.spatial4j.shape.jts.JtsShapeFactory;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.TreeSet;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public class AppTest {
+
     @Test
-    public void shouldAnswerWithTrue(){
+    public void cqtest() {
+        ConcurrentLinkedQueue<String> cq = new ConcurrentLinkedQueue<>();
+        for (int i = 0; i < 1000; i++) {
+            cq.offer("" + i);
+        }
+        int i = 0;
+        while (!cq.isEmpty()) {
+            if (++i == 100) {
+                cq.offer(cq.poll());
+            }
+            System.out.println(cq.poll());
+        }
+    }
+
+    @Test
+    public void shouldAnswerWithTrue() {
         assertTrue(true);
     }
 
     @Test
-    public void spatial4jShapeTest(){
+    public void spatial4jShapeTest() {
         JtsSpatialContextFactory jtsSpatialContextFactory = new JtsSpatialContextFactory();
         JtsSpatialContext jtsSpatialContext = jtsSpatialContextFactory.newSpatialContext();
         JtsShapeFactory jtsShapeFactory = jtsSpatialContext.getShapeFactory();
